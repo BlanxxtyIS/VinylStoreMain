@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VinylShop.Shared", "VinylSh
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VinylShop.Components", "VinylShop.Components\VinylShop.Components.csproj", "{D11A85B5-AB1A-4B56-9C6A-9669451DE57C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VinylShop.Api", "VinylShop.Api\VinylShop.Api.csproj", "{870B16B7-693D-456D-A3FB-5560E3B798F4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{D11A85B5-AB1A-4B56-9C6A-9669451DE57C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D11A85B5-AB1A-4B56-9C6A-9669451DE57C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D11A85B5-AB1A-4B56-9C6A-9669451DE57C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{870B16B7-693D-456D-A3FB-5560E3B798F4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{870B16B7-693D-456D-A3FB-5560E3B798F4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{870B16B7-693D-456D-A3FB-5560E3B798F4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{870B16B7-693D-456D-A3FB-5560E3B798F4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
