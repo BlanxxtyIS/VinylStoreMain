@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using VinylShop.Client;
 using MudBlazor.Services;
 
+//created dev1
+
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.Services.AddMudServices();
 builder.RootComponents.Add<App>("#app");
