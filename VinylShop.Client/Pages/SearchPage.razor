@@ -1,0 +1,90 @@
+﻿@page "/search/{SearchAlbum}"
+@inject HttpClient Http
+@inject NavigationManager NavManager
+
+<PageTitle>Search Albums - Vinyl Store</PageTitle>
+
+<nav aria-label="breadcrumb">
+    <oi class="breadcrumb">
+        <li class="breadcrumb-item">
+            <a href="/">Home</a>
+        </li>
+        <li class="breadcrumb-item active" aria-current="page">Search</li>
+    </oi>
+</nav>
+
+<h3 class="mt-5 mb-4">Search results for @SearchAlbum</h3>
+
+<AlbumFilter SearchTerm="@SearchAlbum" MaxRating="MaxRating" MaxTime="MaxTime" />
+
+@if (_searchResults == null)
+{
+    <p>Loading search results...</p>
+}
+else
+{
+    <AlbumDetails Album="_selectedAlbum" />
+    <div class="grid">
+        @foreach (var album in _searchResults)
+        {
+            <AlbumCard Album="album" OnSelected="HandleAlbumSelected" />
+        }
+    </div>
+}
+
+@code {
+    private IEnumerable<Album>? _cachedSearchResults = Array.Empty<Album>();
+    private IEnumerable<Album>? _searchResults;
+    private Album? _selectedAlbum;
+
+    [Parameter]
+    public string SearchAlbum { get; set; } = default!;
+
+    [Parameter, SupplyParameterFromQuery]
+    public int? MaxRating { get; set; } = default!;
+    [Parameter, SupplyParameterFromQuery]
+    public int? MaxTime { get; set; } = default!;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            var allAlbums = await Http.GetFromJsonAsync<IEnumerable<Album>>("albums/album-data.json");
+            _searchResults = allAlbums!.Where(x => x.Name.Contains(SearchAlbum, StringComparison.CurrentCultureIgnoreCase)
+                || x.AuthorName.Contains(SearchAlbum, StringComparison.CurrentCultureIgnoreCase));
+            _cachedSearchResults = _searchResults;
+        }
+        catch (HttpRequestException ex)
+        {
+            Console.WriteLine($"There was a problem loading trail data: {ex.Message}");
+        }
+    }
+
+    protected override void OnParametersSet() => UpdateFilters();
+
+    private void HandleAlbumSelected(Album album) => _selectedAlbum = album;
+
+    private void UpdateFilters()
+    {
+        var filters = new List<Func<Album, bool>>();
+
+        if (MaxRating is not null && MaxRating > 0)
+        {
+            filters.Add(x => x.Raiting <= MaxRating);
+        }
+
+        if (MaxTime is not null && MaxTime > 0)
+        {
+            filters.Add(x => x.TimeInMinutes <= MaxTime * 60);
+        }
+
+        if (filters.Any())
+        {
+            _searchResults = _cachedSearchResults.Where(trail => filters.All(filter => filter(trail)));
+        }
+        else
+        {
+            _searchResults = _cachedSearchResults;
+        }
+    }
+}

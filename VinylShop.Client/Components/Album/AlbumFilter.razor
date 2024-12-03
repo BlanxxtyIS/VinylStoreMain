@@ -1,0 +1,56 @@
+﻿@inject NavigationManager NavManager
+
+<div class="filters">
+    <label for="maxRating">Max Rating</label>
+    <input id="maxRating"
+           type="number"
+           class="form-control"
+           @bind="_maxRating" />
+
+    <label for="maxTime">Max Time (hours)</label>
+    <input id="maxTime"
+           type="number"
+           class="form-control"
+           @bind="_maxTime" />
+
+    <button class="btn btn-outline-primary" @onclick="FilterSearchResults">Filter</button>
+    <button class="btn btn-outline-secondary" @onclick="ClearSearchFilter">Clear</button>
+</div>
+
+@code {
+    private int _maxRating;
+    private int _maxTime;
+
+    [Parameter, SupplyParameterFromQuery]
+    public int? MaxRating { get; set; }
+
+    [Parameter, SupplyParameterFromQuery]
+    public int? MaxTime { get; set; }
+
+
+    [Parameter, EditorRequired]
+    public string SearchTerm { get; set; } = default!;
+
+    protected override void OnInitialized()
+    {
+        _maxRating = MaxRating ?? 0;
+        _maxTime = MaxTime ?? 0;
+    }
+
+    private void FilterSearchResults()
+    {
+        var uriWithQuerystring = NavManager.GetUriWithQueryParameters(new Dictionary<string, object?>()
+            {
+                [nameof(MaxRating)] = _maxRating == 0 ? null : _maxRating,
+                [nameof(MaxTime)] = _maxTime == 0 ? null : _maxTime
+            });
+        NavManager.NavigateTo(uriWithQuerystring);
+    }
+
+    private void ClearSearchFilter()
+    {
+        _maxRating = 0;
+        _maxTime = 0;
+        NavManager.NavigateTo($"/search/{SearchTerm}");
+    }
+}

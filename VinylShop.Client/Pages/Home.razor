@@ -1,0 +1,40 @@
+﻿@page "/"
+@inject HttpClient Http
+
+<PageTitle>Vinyl Store</PageTitle>
+
+<h1>Hello, buyer!</h1>
+
+Welcome to vinyl shop.
+
+@if (_albums == null)
+{
+    <p>Loading trails...</p>
+} else {
+    <AlbumDetails Album="_selectedAlbum" />
+
+    <AlbumSearch />
+
+    <div class="grid">
+        @foreach (var album in _albums)
+        {
+            <AlbumCard Album="album" OnSelected="HandleAlbumSelected" />
+        }
+    </div>
+}
+
+@code {
+    private IEnumerable<Album>? _albums;
+    private Album? _selectedAlbum;
+
+    protected override async Task OnInitializedAsync() {
+        try {
+            _albums = await Http.GetFromJsonAsync<IEnumerable<Album>>("albums/album-data.json");
+        }
+        catch (HttpRequestException ex) {
+            Console.WriteLine($"There was as problem loading trails data: {ex.Message}");
+        }
+    }
+
+    private void HandleAlbumSelected(Album album) => _selectedAlbum = album;
+}

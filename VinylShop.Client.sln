@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.12.35514.174 d17.12
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VinylShop.Client", "VinylShop.Client\VinylShop.Client.csproj", "{4C82959C-3BEC-4A08-9C02-2B0DFAC47CDB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VinylShop.Shared", "VinylShop.Shared\VinylShop.Shared.csproj", "{8C8FAC53-0979-43D7-8150-00CB3B2F2C85}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{4C82959C-3BEC-4A08-9C02-2B0DFAC47CDB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4C82959C-3BEC-4A08-9C02-2B0DFAC47CDB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4C82959C-3BEC-4A08-9C02-2B0DFAC47CDB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4C82959C-3BEC-4A08-9C02-2B0DFAC47CDB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8C8FAC53-0979-43D7-8150-00CB3B2F2C85}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8C8FAC53-0979-43D7-8150-00CB3B2F2C85}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8C8FAC53-0979-43D7-8150-00CB3B2F2C85}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8C8FAC53-0979-43D7-8150-00CB3B2F2C85}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
