@@ -3,9 +3,15 @@ using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using VinylShop.Client;
 using MudBlazor.Services;
 
-//created dev1
-
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
+
+builder.Services.AddOidcAuthentication(options =>
+{
+    options.ProviderOptions.Authority = "https://your-auth-server";
+    options.ProviderOptions.ClientId = "your-client-id";
+    options.ProviderOptions.ResponseType = "code";
+});
+
 builder.Services.AddMudServices();
 builder.RootComponents.Add<App>("#app");
 builder.RootComponents.Add<HeadOutlet>("head::after");
