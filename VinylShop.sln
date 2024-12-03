@@ -3,13 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.12.35514.174
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VinylShop.Client", "VinylShop.Client\VinylShop.Client.csproj", "{4C82959C-3BEC-4A08-9C02-2B0DFAC47CDB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VinylShop.Client", "VinylShop.Client\VinylShop.Client.csproj", "{4C82959C-3BEC-4A08-9C02-2B0DFAC47CDB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VinylShop.Shared", "VinylShop.Shared\VinylShop.Shared.csproj", "{8C8FAC53-0979-43D7-8150-00CB3B2F2C85}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VinylShop.Shared", "VinylShop.Shared\VinylShop.Shared.csproj", "{8C8FAC53-0979-43D7-8150-00CB3B2F2C85}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VinylShop.Components", "VinylShop.Components\VinylShop.Components.csproj", "{D11A85B5-AB1A-4B56-9C6A-9669451DE57C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VinylShop.Components", "VinylShop.Components\VinylShop.Components.csproj", "{D11A85B5-AB1A-4B56-9C6A-9669451DE57C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VinylShop.Api", "VinylShop.Api\VinylShop.Api.csproj", "{870B16B7-693D-456D-A3FB-5560E3B798F4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VinylShop.Api", "VinylShop.Api\VinylShop.Api.csproj", "{870B16B7-693D-456D-A3FB-5560E3B798F4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
