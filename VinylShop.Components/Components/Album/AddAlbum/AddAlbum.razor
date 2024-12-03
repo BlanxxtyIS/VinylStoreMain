@@ -1,0 +1,44 @@
+﻿@using Microsoft.AspNetCore.Components.Forms
+
+<PageTitle>Add Album - Vinyl Store</PageTitle>
+
+<nav area-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/">Home</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Add Album</li>
+    </ol>
+</nav>
+
+<h3 class="mt-5 mb-4">Add a album</h3>
+
+<EditForm Model="_album" OnValidSubmit="SumbitForm">
+
+<FormSection >
+
+</FormSection>
+
+    <div class="mt-4 mb-5">
+        <div class="row">
+            <div class="offset-4 col-8 text-right">
+                <button class="btn btn-outline-secondary"
+                    type="button"
+                    @onclick="@(() => _album = new AlbumDto())">Reset
+                </button>
+                <button class="btn btn-primary"
+                    type="submit">Submit
+                </button>
+            </div>
+        </div>
+    </div>
+</EditForm>
+
+@code {
+    private AlbumDto _album = new AlbumDto();
+
+    private async Task SumbitForm() {
+        Console.WriteLine("ПЕЧАТЬ ЧПЕЧАТЬ ПЕЧАТЬ");
+        Console.WriteLine("Оправить");
+    }
+}
+
+}
