@@ -1,8 +1,24 @@
 ﻿@page "/counter"
+@inject HttpClient Http
 
 <PageTitle>Counter</PageTitle>
 
 <h1>Admin Page</h1>
 
-<Admin />
+<Admin Albums="_albums"/>
 
+@code {
+    private IEnumerable<Album>? _albums;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            _albums = await Http.GetFromJsonAsync<IEnumerable<Album>>("albums/album-data.json");
+        }
+        catch (HttpRequestException ex)
+        {
+            Console.WriteLine($"There was as problem loading trails data: {ex.Message}");
+        }
+    }
+}

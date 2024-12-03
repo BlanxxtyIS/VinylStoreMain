@@ -25,14 +25,14 @@
 @code {
     private IEnumerable<Album>? _albums;
 
-    public IEnumerable<Album> Albums = new List<Album>();
+    [Parameter, EditorRequired]
+    public IEnumerable<Album> Albums { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
         try
         {
-            _albums = await Http.GetFromJsonAsync<IEnumerable<Album>>("albums/album-data.json");
-            Albums = _albums;
+            _albums = Albums;
         }
         catch (HttpRequestException ex)
         {
