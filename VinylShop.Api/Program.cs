@@ -1,10 +1,16 @@
+using Microsoft.EntityFrameworkCore;
+using VinylShop.Api.Persistence;
+
 var builder = WebApplication.CreateBuilder(args);
+
+var connString = builder.Configuration.GetConnectionString("DefaultConnection");
+builder.Services.AddDbContext<VinylShopContext>(options =>
+    options.UseSqlServer(connString));
 
 builder.Services.AddControllers();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseWebAssemblyDebugging();
