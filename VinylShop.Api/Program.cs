@@ -2,7 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using VinylShop.Api.Persistence;
 
 var builder = WebApplication.CreateBuilder(args);
-
+//dev2
 var connString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<VinylShopContext>(options =>
     options.UseSqlServer(connString));
