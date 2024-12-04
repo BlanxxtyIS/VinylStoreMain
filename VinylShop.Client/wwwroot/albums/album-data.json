@@ -1,7 +1,7 @@
 [
   {
     "id": 1,
-    "image": "albums/1.jpg",
+    "ImageType": "albums/1.jpg",
     "name": "Countryside Ramble",
     "authorName": "Durbach, Germany",
     "timeInMinutes": 195,
@@ -32,7 +32,7 @@
   },
   {
     "id": 2,
-    "image": "albums/2.jpg",
+    "ImageType": "albums/2.jpg",
     "name": "Woodland Walk",
     "authorName": "Nottingham, UK",
     "timeInMinutes": 80,
@@ -63,7 +63,7 @@
   },
   {
     "id": 3,
-    "image": "albums/3.jpg",
+    "ImageType": "albums/3.jpg",
     "name": "Alpine Hike",
     "authorName": "Furna, Switzerland",
     "timeInMinutes": 150,
@@ -94,7 +94,7 @@
   },
   {
     "id": 4,
-    "image": "albums/4.jpg",
+    "ImageType": "albums/4.jpg",
     "name": "Bridge to Nowhere",
     "authorName": "Gearstones, UK",
     "timeInMinutes": 320,
@@ -125,7 +125,7 @@
   },
   {
     "id": 5,
-    "image": "albums/5.jpg",
+    "ImageType": "albums/5.jpg",
     "name": "Costal Walk",
     "authorName": "Ockle, Scotland",
     "timeInMinutes": 105,
@@ -156,7 +156,7 @@
   },
   {
     "id": 6,
-    "image": "albums/6.jpg",
+    "ImageType": "albums/6.jpg",
     "name": "Through the valleys",
     "authorName": "Tryfan, Wales",
     "timeInMinutes": 290,
@@ -187,7 +187,7 @@
   },
   {
     "id": 7,
-    "image": "albums/7.jpg",
+    "ImageType": "albums/7.jpg",
     "name": "Mountian Lakes",
     "authorName": "Scafell Pike, UK",
     "timeInMinutes": 205,
@@ -218,7 +218,7 @@
   },
   {
     "id": 8,
-    "image": "albums/8.jpg",
+    "ImageType": "albums/8.jpg",
     "name": "Forest Trek",
     "authorName": "Clayhill, UK",
     "timeInMinutes": 185,
@@ -249,7 +249,7 @@
   },
   {
     "id": 9,
-    "image": "albums/9.jpg",
+    "ImageType": "albums/9.jpg",
     "name": "Open Countryside",
     "authorName": "Long Stratton, UK",
     "timeInMinutes": 50,

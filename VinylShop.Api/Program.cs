@@ -29,6 +29,7 @@ builder.Services.AddAuthentication(options =>
     });
 
 builder.Services.AddScoped<ITokenService, TokenService>();
+builder.Services.AddScoped<AlbumService>();
 
 var connString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<VinylShopContext>(options =>
