@@ -1,24 +1,35 @@
 ﻿@using System.Text.RegularExpressions
 @using System.ComponentModel.DataAnnotations
+@using Microsoft.AspNetCore.Components.Forms
 @inject ISnackbar Snackbar
+@inject HttpClient Http
+
 
 <MudGrid>
     <MudItem xs="12" sm="7">
         <MudPaper Class="pa-4">
             <MudForm @ref="form" @bind-IsValid="@success" @bind-Errors="@errors">
-                <MudTextField @bind-Value="UserName" T="string" Label="Name" Required="true" RequiredError="User name is required!" />
+                <MudTextField @bind-Value="Album.Name" T="string" Label="Name" Required="true" RequiredError="User name is required!" />
 
-                <MudTextField T="string" Label="Description" Required="false" />
+                <MudTextField @bind-Value="Album.Description" T="string" Label="Description" Required="false" />
 
-                <MudTextField T="string" Label="Image" Required="false" />
+                <MudTextField @bind-Value="Album.AuthorName" T="string" Label="Author name" Required="false" />
 
-                <MudTextField T="string" Label="Author name" Required="false" />
+                <MudTextField @bind-Value="Album.TimeInMinutes" T="int" Label="Time in minutes" Required="false" />
 
-                <MudTextField T="string" Label="Time in minutes" Required="false" />
+                <MudTextField @bind-Value="Album.Rating" T="int" Label="Rating" Required="false" />
 
-                <MudTextField T="string" Label="Rating" Required="false" />
+                <MudTextField @bind-Value="Album.Name" T="string" Label="Tracks" Required="false" />
 
-                <MudTextField T="string" Label="Tracks" Required="false" />
+                <MudFileUpload T="IBrowserFile" FilesChanged="UploadFiles">
+                    <ActivatorContent>
+                        <MudButton Variant="Variant.Filled"
+                                   Color="Color.Primary"
+                                   StartIcon="@Icons.Material.Filled.CloudUpload">
+                            Upload Files
+                        </MudButton>
+                    </ActivatorContent>
+                </MudFileUpload>
 
                 <div class="d-flex">
                     <MudRadioGroup T="string" Required="true" RequiredError="Account type is required!">
@@ -28,7 +39,7 @@
                 </div>
                 <div class="d-flex align-center justify-space-between">
                     <MudCheckBox T="bool" Required="true" RequiredError="You must agree" Label="I agree!" />
-                    <MudButton Variant="Variant.Filled" Color="Color.Primary" Disabled="@(!success)" Class="ml-auto" OnClick="RegisterIsSuccess">Register</MudButton>
+                    <MudButton Variant="Variant.Filled" Color="Color.Primary" Disabled="@(!success)" Class="ml-auto" OnClick="AddAlbumAsync">Register</MudButton>
                 </div>
             </MudForm>
         </MudPaper>
@@ -49,14 +60,60 @@
 </MudGrid>
 
 @code {
-    private string UserName { get; set; } = default!;
+    private Album Album { get; set; } = new Album();
 
     bool success;
     string[] errors = { };
     MudForm form;
 
+    private async Task UploadFiles(IBrowserFile file)
+    {
+        try
+        {
+            // Ограничение размера файла (например, 4MB)
+            var maxFileSize = 4 * 1024 * 1024;
 
-    private void RegisterIsSuccess() {
-        Snackbar.Add("Data edited", Severity.Success);
+            if (file.Size > maxFileSize)
+            {
+                Snackbar.Add("Файл слишком большой (максимум 4MB)", Severity.Error);
+                return;
+            }
+
+            // Чтение файла
+            using var ms = new MemoryStream();
+            await file.OpenReadStream(maxFileSize).CopyToAsync(ms);
+
+            // Сохранение данных в модель Album
+            Album.ImageData = ms.ToArray();
+            Album.ImageType = file.ContentType;
+
+            Snackbar.Add("Изображение успешно загружено", Severity.Success);
+        }
+        catch (Exception ex)
+        {
+            Snackbar.Add($"Ошибка при загрузке файла: {ex.Message}", Severity.Error);
+        }
+    }
+
+    private async Task AddAlbumAsync()
+    {
+        try
+        {
+            var response = await Http.PostAsJsonAsync("api/AlbumIteration/AddAlbum", Album);
+            if (response.IsSuccessStatusCode)
+            {
+                Snackbar.Add("Альбом успешно добавлен", Severity.Success);
+                Album = new Album(); // Очистка формы
+                await form.ResetAsync();
+            }
+            else
+            {
+                Snackbar.Add("Ошибка при добавлении альбома", Severity.Error);
+            }
+        }
+        catch (Exception ex)
+        {
+            Snackbar.Add($"Ошибка: {ex.Message}", Severity.Error);
+        }
     }
 }

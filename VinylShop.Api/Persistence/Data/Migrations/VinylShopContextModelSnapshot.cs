@@ -38,7 +38,11 @@ namespace VinylShop.Api.Persistence.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Image")
+                    b.Property<byte[]>("ImageData")
+                        .IsRequired()
+                        .HasColumnType("varbinary(max)");
+
+                    b.Property<string>("ImageType")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -46,7 +50,7 @@ namespace VinylShop.Api.Persistence.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Raiting")
+                    b.Property<int>("Rating")
                         .HasColumnType("int");
 
                     b.Property<int>("TimeInMinutes")

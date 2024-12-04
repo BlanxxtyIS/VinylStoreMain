@@ -1,5 +1,5 @@
 ﻿<div class="card shadow" style="width: 18rem;">
-    <img src="@Album.Image" class="card-img-top" alt="@Album.Name" />
+    @* <img src="@Album.Image" class="card-img-top" alt="@Album.Name" /> *@
     <div class="card-body">
         <h5 class="card-title">@Album.Name</h5>
         <h6 class="card-subtitle mb-3 text-muted">
@@ -13,7 +13,7 @@
             </span>
             <span>
                 <span class="oi oi-infinity mr-2"></span>
-                @Album.Raiting / 5 stars
+                @Album.Rating / 5 stars
             </span>
         </div>
         <button class="btn btn-primary" title="View" @onclick="@(async () => OnSelected.InvokeAsync(Album))">

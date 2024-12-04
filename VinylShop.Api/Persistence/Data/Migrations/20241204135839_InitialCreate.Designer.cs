@@ -12,7 +12,7 @@ using VinylShop.Api.Persistence;
 namespace VinylShop.Api.Persistence.Data.Migrations
 {
     [DbContext(typeof(VinylShopContext))]
-    [Migration("20241203121803_InitialCreate")]
+    [Migration("20241204135839_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -41,7 +41,11 @@ namespace VinylShop.Api.Persistence.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Image")
+                    b.Property<byte[]>("ImageData")
+                        .IsRequired()
+                        .HasColumnType("varbinary(max)");
+
+                    b.Property<string>("ImageType")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -49,7 +53,7 @@ namespace VinylShop.Api.Persistence.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Raiting")
+                    b.Property<int>("Rating")
                         .HasColumnType("int");
 
                     b.Property<int>("TimeInMinutes")
