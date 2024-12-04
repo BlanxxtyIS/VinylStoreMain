@@ -1,44 +1,61 @@
-﻿@using Microsoft.AspNetCore.Components.Forms
+﻿@using System.Text.RegularExpressions
+@using System.ComponentModel.DataAnnotations
+@inject ISnackbar Snackbar
 
-<PageTitle>Add Album - Vinyl Store</PageTitle>
+<MudGrid>
+    <MudItem xs="12" sm="7">
+        <MudPaper Class="pa-4">
+            <MudForm @ref="form" @bind-IsValid="@success" @bind-Errors="@errors">
+                <MudTextField T="string" Label="Name" Required="true" RequiredError="User name is required!" />
 
-<nav area-label="breadcrumb">
-    <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="/">Home</a></li>
-        <li class="breadcrumb-item active" aria-current="page">Add Album</li>
-    </ol>
-</nav>
+                <MudTextField T="string" Label="Description" Required="false" />
 
-<h3 class="mt-5 mb-4">Add a album</h3>
+                <MudTextField T="string" Label="Image" Required="false" />
 
-<EditForm Model="_album" OnValidSubmit="SumbitForm">
+                <MudTextField T="string" Label="Author name" Required="false" />
 
-<FormSection >
+                <MudTextField T="string" Label="Time in minutes" Required="false" />
 
-</FormSection>
+                <MudTextField T="string" Label="Rating" Required="false" />
 
-    <div class="mt-4 mb-5">
-        <div class="row">
-            <div class="offset-4 col-8 text-right">
-                <button class="btn btn-outline-secondary"
-                    type="button"
-                    @onclick="@(() => _album = new AlbumDto())">Reset
-                </button>
-                <button class="btn btn-primary"
-                    type="submit">Submit
-                </button>
-            </div>
-        </div>
-    </div>
-</EditForm>
+                <MudTextField T="string" Label="Tracks" Required="false" />
+
+                <div class="d-flex">
+                    <MudRadioGroup T="string" Required="true" RequiredError="Account type is required!">
+                        <MudRadio Value="@("Personal")">Personal</MudRadio>
+                        <MudRadio Value="@("Professional")">Professional</MudRadio>
+                    </MudRadioGroup>
+                </div>
+                <div class="d-flex align-center justify-space-between">
+                    <MudCheckBox T="bool" Required="true" RequiredError="You must agree" Label="I agree!" />
+                    <MudButton Variant="Variant.Filled" Color="Color.Primary" Disabled="@(!success)" Class="ml-auto" OnClick="RegisterIsSuccess">Register</MudButton>
+                </div>
+            </MudForm>
+        </MudPaper>
+        <MudPaper Class="pa-4 mt-4">
+            <MudButton Variant="Variant.Filled" Color="Color.Primary" DropShadow="false" OnClick="@(()=>form.Validate())">Validate</MudButton>
+            <MudButton Variant="Variant.Filled" Color="Color.Secondary" DropShadow="false" OnClick="@(()=>form.ResetAsync())" Class="mx-2">Reset</MudButton>
+        </MudPaper>
+    </MudItem>
+    <MudItem xs="12" sm="5">
+        <MudPaper Class="pa-4 mud-height-full">
+            <MudText Typo="Typo.subtitle2">@($"Errors ({errors.Length})")</MudText>
+            @foreach (var error in errors)
+            {
+                <MudText Color="@Color.Error">@error</MudText>
+            }
+        </MudPaper>
+    </MudItem>
+</MudGrid>
 
 @code {
-    private AlbumDto _album = new AlbumDto();
+    bool success;
+    string[] errors = { };
+    MudForm form;
 
-    private async Task SumbitForm() {
-        Console.WriteLine("ПЕЧАТЬ ЧПЕЧАТЬ ПЕЧАТЬ");
-        Console.WriteLine("Оправить");
+
+    private void RegisterIsSuccess() {
+        Snackbar.Add("Data edited", Severity.Success);
     }
-}
 
 }
