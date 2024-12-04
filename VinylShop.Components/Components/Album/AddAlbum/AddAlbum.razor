@@ -6,7 +6,7 @@
     <MudItem xs="12" sm="7">
         <MudPaper Class="pa-4">
             <MudForm @ref="form" @bind-IsValid="@success" @bind-Errors="@errors">
-                <MudTextField T="string" Label="Name" Required="true" RequiredError="User name is required!" />
+                <MudTextField @bind-Value="UserName" T="string" Label="Name" Required="true" RequiredError="User name is required!" />
 
                 <MudTextField T="string" Label="Description" Required="false" />
 
@@ -49,6 +49,8 @@
 </MudGrid>
 
 @code {
+    private string UserName { get; set; } = default!;
+
     bool success;
     string[] errors = { };
     MudForm form;
@@ -57,5 +59,4 @@
     private void RegisterIsSuccess() {
         Snackbar.Add("Data edited", Severity.Success);
     }
-
 }
