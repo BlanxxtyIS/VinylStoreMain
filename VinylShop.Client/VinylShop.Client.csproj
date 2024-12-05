@@ -15,6 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Project1\Project1.csproj" />
     <ProjectReference Include="..\VinylShop.Components\VinylShop.Components.csproj" />
     <ProjectReference Include="..\VinylShop.Shared\VinylShop.Shared.csproj" />
   </ItemGroup>
