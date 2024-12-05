@@ -1,0 +1,123 @@
+﻿@page "/"
+@inject HttpClient Http
+@inject ISnackbar Snackbar
+
+<PageTitle>Vinyl Store</PageTitle>
+
+<h1>Hello, buyer!</h1>
+
+Welcome to vinyl shop.
+
+@if (_albums == null)
+{
+    <p>Loading trails...</p>
+} else {
+    <AlbumDetails Album="_selectedAlbum" />
+    <AlbumSearch />
+
+    <div class="grid">
+        @foreach (var album in _albums)
+        {
+            <AlbumCard Album="album" OnSelected="HandleAlbumSelected" />
+        }
+    </div>
+}
+
+<AdminPage1 Items="@Elements"
+           OnEditSubmit="@(async (Album item) => await HandleEditSubmit(item))"
+           OnDeleteClick="@(async (Album item) => await HandleDelete(item))" />
+
+@code {
+    private List<Album> Elements = new List<Album>();
+
+
+
+    private async Task HandleEditSubmit(Album updatedItem)
+    {
+        var index = Elements.FindIndex(e => e.AlbumId == updatedItem.AlbumId);
+        if (index != -1)
+        {
+            try
+            {
+                var response = await Http.PutAsJsonAsync($"api/AlbumIteration/updateAlbum/{updatedItem.AlbumId}", updatedItem);
+                if (response.IsSuccessStatusCode)
+                {
+                    Snackbar.Add("Album added successfully", Severity.Success);
+                }
+                else
+                {
+                    var error = await response.Content.ReadAsStringAsync();
+                    Snackbar.Add($"Error adding album: {error}", Severity.Error);
+                }
+            }
+            catch (Exception ex)
+            {
+                Snackbar.Add($"Error: {ex.Message}", Severity.Error);
+            }
+            Elements[index] = updatedItem;
+            StateHasChanged(); // Это нужно оставить
+        }
+        Console.WriteLine($"Обновлен элемент с ID: {updatedItem.AlbumId}");
+    }
+
+    private async Task HandleDelete(Album itemToDelete)
+    {
+        try
+        {
+            var response = await Http.DeleteAsync($"api/AlbumIteration/deleteAlbum/{itemToDelete.AlbumId}");
+            if (response.IsSuccessStatusCode)
+            {
+                Snackbar.Add("Альбом успешно удален", Severity.Success);
+            }
+            else
+            {
+                var error = await response.Content.ReadAsStringAsync();
+                Snackbar.Add($"Ошибка при удалении альбома: {error}", Severity.Error);
+            }
+        }
+        catch (Exception ex)
+        {
+            Snackbar.Add($"Ошибка: {ex.Message}", Severity.Error);
+        }
+        StateHasChanged(); // Это нужно оставить
+        Console.WriteLine($"Удален элемент с ID: {itemToDelete.AlbumId}");
+    }
+
+    private IEnumerable<Album>? _albums;
+    private Album? _selectedAlbum;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            // _albums = await Http.GetFromJsonAsync<IEnumerable<Album>>("albums/album-data.json");
+            _albums = await Http.GetFromJsonAsync<IEnumerable<Album>>("api/albumIteration/getAlbums");
+            Elements = await Http.GetFromJsonAsync<List<Album>>("api/albumIteration/getAlbums");
+
+            ;
+            if (_albums != null)
+            {
+                foreach (var album in _albums)
+                {
+                    try
+                    {
+                        // Используем путь из ImageType для загрузки изображения
+                        var imageBytes = await Http.GetByteArrayAsync(album.ImageType);
+                        album.ImageData = imageBytes;
+                        album.ImageType = "image/jpeg"; // Устанавливаем MIME-тип
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine($"Error loading image for album {album.Name}: {ex.Message}");
+                    }
+                }
+            }
+        }
+        catch (HttpRequestException ex)
+        {
+            Console.WriteLine($"There was as problem loading albums data: {ex.Message}");
+        }
+    }
+
+    private void HandleAlbumSelected(Album album) => _selectedAlbum = album;
+}

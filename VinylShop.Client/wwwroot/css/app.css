@@ -162,3 +162,9 @@ text.valid.modified,
 select.valid.modified {
     border-color: green;
 }
+
+
+/* Form section */
+.card-brand {
+    border-top: 4px solid var(--brand);
+}

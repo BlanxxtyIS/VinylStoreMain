@@ -1,0 +1,70 @@
+@typeparam TItem where TItem : class
+@inject ISnackbar Snackbar
+@inject HttpClient Http
+@using System.Reflection
+@using System
+
+<MudDialog>
+    <TitleContent>
+        <MudText Typo="Typo.h6">
+            <MudIcon Icon="@Icons.Material.Filled.Edit" Class="mr-3 mb-n1" />
+            @Title
+        </MudText>
+    </TitleContent>
+    <DialogContent>
+        @foreach (var prop in typeof(TItem).GetProperties())
+        {
+            var propertyName = prop.Name;
+            var value = prop.GetValue(Item)?.ToString();
+            <MudTextField T="string"
+                          Value="@value"
+                          Label="@propertyName"
+                          ValueChanged="@(newValue => UpdateProperty(prop, newValue))" />
+        }
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="Cancel">Cancel</MudButton>
+        <MudButton Color="Color.Primary" OnClick="Submit">Save</MudButton>
+    </DialogActions>
+</MudDialog>
+
+@code {
+    [CascadingParameter]
+    private MudDialogInstance MudDialog { get; set; }
+
+    [Parameter]
+    public TItem Item { get; set; }
+
+    [Parameter]
+    public string Title { get; set; } = "Edit Item";
+
+    [Parameter]
+    public EventCallback<TItem> OnSubmit { get; set; }
+
+    private void UpdateProperty(PropertyInfo prop, string value)
+    {
+        if (string.IsNullOrEmpty(value)) return;
+
+        try
+        {
+            var targetType = Nullable.GetUnderlyingType(prop.PropertyType) ?? prop.PropertyType;
+            var convertedValue = Convert.ChangeType(value, targetType);
+            prop.SetValue(Item, convertedValue);
+        }
+        catch (Exception ex)
+        {
+            Snackbar.Add($"Unable to convert value for {prop.Name}: {ex.Message}", Severity.Error);
+        }
+    }
+
+    private void Cancel() => MudDialog.Cancel();
+
+    private async Task Submit()
+    {
+        if (OnSubmit.HasDelegate)
+        {
+            await OnSubmit.InvokeAsync(Item);
+        }
+        MudDialog.Close(DialogResult.Ok(Item));
+    }
+}

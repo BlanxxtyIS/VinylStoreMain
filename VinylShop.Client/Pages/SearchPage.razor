@@ -49,7 +49,8 @@ else
     {
         try
         {
-            var allAlbums = await Http.GetFromJsonAsync<IEnumerable<Album>>("albums/album-data.json");
+            // var allAlbums = await Http.GetFromJsonAsync<IEnumerable<Album>>("albums/album-data.json");
+            var allAlbums = await Http.GetFromJsonAsync<IEnumerable<Album>>("api/albumIteration/getAlbums");
             _searchResults = allAlbums!.Where(x => x.Name.Contains(SearchAlbum, StringComparison.CurrentCultureIgnoreCase)
                 || x.AuthorName.Contains(SearchAlbum, StringComparison.CurrentCultureIgnoreCase));
             _cachedSearchResults = _searchResults;
@@ -70,7 +71,7 @@ else
 
         if (MaxRating is not null && MaxRating > 0)
         {
-            filters.Add(x => x.Raiting <= MaxRating);
+            filters.Add(x => x.Rating <= MaxRating);
         }
 
         if (MaxTime is not null && MaxTime > 0)

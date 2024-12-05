@@ -1,0 +1,114 @@
+@typeparam TItem where TItem : class
+@inject IDialogService DialogService
+@inject HttpClient Http
+@using System.Reflection
+@using MudBlazor
+@using System
+
+<MudDataGrid Items="@Items" Filterable="false" SortMode="@SortMode.None" Groupable="false">
+    <Columns>
+        @foreach (var prop in GetProperties())
+        {
+            <PropertyColumn Property="@(x => prop.GetValue(x))" Title="@GetDisplayName(prop)" />
+        }
+        <TemplateColumn CellClass="d-flex justify-end">
+            <CellTemplate Context="context">
+                <MudStack Row>
+                    <MudButton Variant="Variant.Filled"
+                               StartIcon="@Icons.Material.Filled.Delete"
+                               Color="Color.Error"
+                               Size="Size.Small"
+                               OnClick="@(() => OnDeleteClick.InvokeAsync(context.Item))">Delete</MudButton>
+                    <MudButton Variant="Variant.Filled"
+                               StartIcon="@Icons.Material.Filled.Edit"
+                               Color="Color.Info"
+                               Size="Size.Small"
+                               OnClick="@(() => ShowEditDialog(context.Item))">Edit</MudButton>
+                </MudStack>
+            </CellTemplate>
+        </TemplateColumn>
+    </Columns>
+</MudDataGrid>
+
+@code {
+    [Parameter, EditorRequired]
+    public IEnumerable<TItem> Items { get; set; }
+
+    [Parameter]
+    public EventCallback<TItem> OnDeleteClick { get; set; }
+
+    [Parameter]
+    public EventCallback<TItem> OnEditSubmit { get; set; }
+
+    [Parameter]
+    public string DialogTitle { get; set; } = "Edit Item";
+
+    private IEnumerable<PropertyInfo> GetProperties()
+    {
+        return typeof(TItem).GetProperties(BindingFlags.Public | BindingFlags.Instance);
+    }
+
+    private string GetDisplayName(PropertyInfo prop)
+    {
+        return prop.Name;
+    }
+
+    private async Task ShowEditDialog(TItem item)
+    {
+        var editItem = item;
+        var parameters = new DialogParameters<AdminDialog1<TItem>>
+        {
+            { x => x.Item, editItem },
+            { x => x.OnSubmit, OnEditSubmit }
+        };
+
+        var dialog = await DialogService.ShowAsync<AdminDialog1<TItem>>(DialogTitle, parameters);
+        var result = await dialog.Result;
+
+        // Только если диалог был закрыт с OK, вызываем событие
+        if (!result.Canceled)
+        {
+            await OnEditSubmit.InvokeAsync(editItem);
+        }
+    }
+}
+
+@* <AdminPage Items="@Elements"
+           OnEditSubmit="@(async (Models item) => await HandleEditSubmit(item))"
+           OnDeleteClick="@(async (Models item) => await HandleDelete(item))" />
+
+@code {
+    private List<Models> Elements = new List<Models>();
+
+    Elements = new List<Models>
+        {
+            new Models { AlbumId = 1, Name = "Element 1", Description = "Description 1", AuthorName = "AuthorName 1", TimeInMinutes = 420, Rating
+             = 1},
+            new Models { AlbumId = 2, Name = "Element 2", Description = "Description 2", AuthorName = "AuthorName 2", TimeInMinutes = 420, Rating
+             = 2},
+            new Models { AlbumId = 3, Name = "Element 3", Description = "Description 3", AuthorName = "AuthorName 3", TimeInMinutes = 420, Rating
+             = 3},
+            new Models { AlbumId = 4, Name = "Element 4", Description = "Description 4", AuthorName = "AuthorName 4", TimeInMinutes = 420, Rating
+             = 4},
+            new Models { AlbumId = 5, Name = "Element 5", Description = "Description 5", AuthorName = "AuthorName 5", TimeInMinutes = 420, Rating
+             = 5},
+        };
+        
+    private async Task HandleEditSubmit(Models updatedItem)
+    {
+        var index = Elements.FindIndex(e => e.AlbumId == updatedItem.AlbumId);
+        if (index != -1)
+        {
+            Elements[index] = updatedItem;
+            StateHasChanged(); // Это нужно оставить
+        }
+        Console.WriteLine($"Обновлен элемент с ID: {updatedItem.AlbumId}");
+    }
+
+    private async Task HandleDelete(Models itemToDelete)
+    {
+        Elements.Remove(itemToDelete);
+        StateHasChanged(); // Это нужно оставить
+        Console.WriteLine($"Удален элемент с ID: {itemToDelete.AlbumId}");
+    }
+} *@

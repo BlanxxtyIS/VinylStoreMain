@@ -5,16 +5,19 @@
     <Columns>
         <PropertyColumn Property="x => x.Name" />
         <PropertyColumn Property="x => x.Description" />
-        <PropertyColumn Property="x => x.Image" />
+        <PropertyColumn Property="x => x.ImageData" />
         <PropertyColumn Property="x => x.AuthorName" />
         <PropertyColumn Property="x => x.TimeFormatted" />
-        <PropertyColumn Property="x => x.Raiting" />
+        <PropertyColumn Property="x => x.Rating" />
+        <MudImage Fluid="true" Src="x => x.ImageBase64" Alt="Swedish Farm House" Class="rounded-lg" />
         <PropertyColumn Property="x => x.Tracks" />
         <TemplateColumn CellClass="d-flex justify-end">
             <CellTemplate>
                 <MudStack Row>
+                    <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Delete" Color="Color.Error" Size="Size.Small"
+                               OnClick="@((e) => DeleteUserAsync(context.Item))">Delete</MudButton>
                     <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Edit" Color="Color.Info" Size="Size.Small"
-                    OnClick="@((e) => DeleteServerAsync(context.Item))">Edit</MudButton>
+                    OnClick="@((e) => EditServerAsync(context.Item))">Edit</MudButton>
                 </MudStack>
             </CellTemplate>
         </TemplateColumn>
@@ -23,16 +26,17 @@
 
 
 @code {
+
     private IEnumerable<Album>? _albums;
 
-    public IEnumerable<Album> Albums = new List<Album>();
+    [Parameter, EditorRequired]
+    public IEnumerable<Album> Albums { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
         try
         {
-            _albums = await Http.GetFromJsonAsync<IEnumerable<Album>>("albums/album-data.json");
-            Albums = _albums;
+            _albums = Albums;
         }
         catch (HttpRequestException ex)
         {
@@ -40,11 +44,27 @@
         }
     }
 
-    private async Task DeleteServerAsync(Album album)
+    private Task DeleteUserAsync(Album album)
+    {
+        var parameters = new DialogParameters<DeleteDialog>
+    {
+        { x => x.ContentText, "Do you really want to delete this album? This process cannot be undone." },
+        { x => x.ButtonText, "Delete" },
+        { x => x.Color, Color.Error },
+        { x => x.Album, album }
+    };
+
+        var options = new DialogOptions() { CloseButton = true, MaxWidth = MaxWidth.ExtraSmall };
+
+        return DialogService.ShowAsync<DeleteDialog>("Delete", parameters, options);
+    }
+
+
+    private async Task EditServerAsync(Album album)
     {
         var parameters = new DialogParameters<AdminDialog> { { x => x.Album, album } };
 
-        var dialog = await DialogService.ShowAsync<AdminDialog>("Delete Server", parameters);
+        var dialog = await DialogService.ShowAsync<AdminDialog>("Edit Server", parameters);
         var result = await dialog.Result;
 
         if (!result.Canceled)

@@ -4,7 +4,7 @@
         @if (_activeAlbum is not null)
         {
             <div class="drawer-content">
-                <img src="@_activeAlbum.Image" />
+                <img src="@_activeAlbum.ImageBase64" />
                 <div class="trail-details">
                     <h3>@_activeAlbum.Name</h3>
                     <h6 class="mb-3 text-muted">
@@ -18,7 +18,7 @@
                         </span>
                         <span>
                             <span class="oi oi-infinity mr-2"></span>
-                            @_activeAlbum.Raiting stars
+                            @_activeAlbum.Rating stars
                         </span>
                     </div>
                     <p class="mt-4">@_activeAlbum.Description</p>
