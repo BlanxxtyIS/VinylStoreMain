@@ -44,7 +44,7 @@ namespace VinylShop.Api.Controllers
         }
 
         [HttpPut]
-        [Route("updateAlbym/{id}")]
+        [Route("updateAlbum/{id}")]
         public async Task<IActionResult> UpdateAlbum(int id, Album album)
         {
             if (id != album.AlbumId)

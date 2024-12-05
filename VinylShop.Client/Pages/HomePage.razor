@@ -30,7 +30,8 @@ Welcome to vinyl shop.
     {
         try
         {
-            _albums = await Http.GetFromJsonAsync<IEnumerable<Album>>("albums/album-data.json");
+            // _albums = await Http.GetFromJsonAsync<IEnumerable<Album>>("albums/album-data.json");
+            _albums = await Http.GetFromJsonAsync<IEnumerable<Album>>("api/albumIteration/getAlbums");
 
             if (_albums != null)
             {

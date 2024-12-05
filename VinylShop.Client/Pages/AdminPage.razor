@@ -15,7 +15,8 @@
     {
         try
         {
-            _albums = await Http.GetFromJsonAsync<IEnumerable<Album>>("albums/album-data.json");
+            // _albums = await Http.GetFromJsonAsync<IEnumerable<Album>>("albums/album-data.json");
+            _albums = await Http.GetFromJsonAsync<IEnumerable<Album>>("api/albumIteration/getAlbums");
         }
         catch (HttpRequestException ex)
         {

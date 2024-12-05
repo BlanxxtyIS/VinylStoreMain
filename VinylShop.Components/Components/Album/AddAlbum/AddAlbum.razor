@@ -14,6 +14,16 @@
                 <MudTextField @bind-Value="Album.TimeInMinutes" T="int" Label="Time in minutes" Required="false" />
                 <MudTextField @bind-Value="Album.Rating" T="int" Label="Rating" Required="false" />
 
+                <MudFileUpload T="IBrowserFile" FilesChanged="UploadFiles">
+                    <ActivatorContent>
+                        <MudButton Variant="Variant.Filled"
+                                   Color="Color.Primary"
+                                   StartIcon="@Icons.Material.Filled.CloudUpload">
+                            Upload Files
+                        </MudButton>
+                    </ActivatorContent>
+                </MudFileUpload>
+
                 <MudTable Items="@Album.Tracks" Dense="true" Hover="true">
                     <ToolBarContent>
                         <MudText Typo="Typo.h6">Tracks</MudText>
@@ -44,6 +54,7 @@
                                Disabled="@(!success)"
                                OnClick="AddAlbumAsync">Save Album</MudButton>
                 </div>
+
             </MudForm>
         </MudPaper>
     </MudItem>
@@ -63,6 +74,22 @@
     bool success;
     string[] errors = { };
     MudForm form;
+
+    IList<IBrowserFile> _files = new List<IBrowserFile>();
+    private async Task UploadFiles(IBrowserFile file)
+    {
+        // Чтение содержимого файла
+        using var stream = file.OpenReadStream(maxAllowedSize: 10 * 1024 * 1024); // Ограничьте размер потока по необходимости
+        using var memoryStream = new MemoryStream();
+
+        await stream.CopyToAsync(memoryStream);
+
+        // Сохраните данные изображения и тип
+        Album.ImageData = memoryStream.ToArray();
+        Album.ImageType = file.ContentType; // Получаем MIME-тип
+
+        // Если необходимо, можно также сохранить файл на сервере здесь
+    }
 
     private async Task AddAlbumAsync()
     {

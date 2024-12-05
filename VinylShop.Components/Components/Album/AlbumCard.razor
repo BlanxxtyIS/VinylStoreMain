@@ -1,5 +1,12 @@
 ﻿<div class="card shadow" style="width: 18rem;">
-    <img src="@Album.ImageBase64" class="card-img-top" alt="@Album.Name" />
+    @if (!string.IsNullOrEmpty(Album.ImageBase64))
+    {
+        <img src="@Album.ImageBase64" class="card-img-top" alt="@Album.Name" />
+    }
+    else
+    {
+        <p>Изображение недоступно</p>
+    }
     <div class="card-body">
         <h5 class="card-title">@Album.Name</h5>
         <h6 class="card-subtitle mb-3 text-muted">

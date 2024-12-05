@@ -39,6 +39,11 @@ namespace VinylShop.Api.Service
             {
                 existingAlbum.Name = album.Name;
                 existingAlbum.Description = album.Description;
+                existingAlbum.AuthorName = album.AuthorName;
+                existingAlbum.TimeInMinutes = album.TimeInMinutes;
+                existingAlbum.Rating = album.Rating;
+                existingAlbum.ImageData = album.ImageData;
+                existingAlbum.ImageType = album.ImageType;
                 existingAlbum.Tracks = album.Tracks;
 
                 await _context.SaveChangesAsync();
