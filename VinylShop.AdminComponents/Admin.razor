@@ -56,13 +56,13 @@
     private async Task ShowEditDialog(TItem item)
     {
         var editItem = item;
-        var parameters = new DialogParameters<AdminDialog1<TItem>>
+        var parameters = new DialogParameters<AdminDialog<TItem>>
         {
             { x => x.Item, editItem },
             { x => x.OnSubmit, OnEditSubmit }
         };
 
-        var dialog = await DialogService.ShowAsync<AdminDialog1<TItem>>(DialogTitle, parameters);
+        var dialog = await DialogService.ShowAsync<AdminDialog<TItem>>(DialogTitle, parameters);
         var result = await dialog.Result;
 
         // Только если диалог был закрыт с OK, вызываем событие

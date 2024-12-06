@@ -1,28 +1,81 @@
 ﻿@page "/admin"
 @attribute [Authorize]
 @inject HttpClient Http
+@inject ISnackbar Snackbar
 
 <PageTitle>Counter</PageTitle>
 
 <h1>Admin Page</h1>
 
-<Admin Albums="_albums"/>
-
-
+<Admin Items="@Albums"
+           OnEditSubmit="@(async (Album item) => await HandleEditSubmit(item))"
+           OnDeleteClick="@(async (Album item) => await HandleDelete(item))" />
 
 @code {
+    private List<Album> Albums = new List<Album>();
     private IEnumerable<Album>? _albums;
 
     protected override async Task OnInitializedAsync()
     {
         try
         {
-            // _albums = await Http.GetFromJsonAsync<IEnumerable<Album>>("albums/album-data.json");
-            _albums = await Http.GetFromJsonAsync<IEnumerable<Album>>("api/albumIteration/getAlbums");
+            Albums = await Http.GetFromJsonAsync<List<Album>>("api/albumIteration/getAlbums");
+            _albums = Albums;
         }
         catch (HttpRequestException ex)
         {
-            Console.WriteLine($"There was as problem loading trails data: {ex.Message}");
+            Snackbar.Add($"Error loading albums: {ex.Message}", Severity.Error);
         }
+    }
+
+    private async Task HandleEditSubmit(Album updatedItem)
+    {
+        var index = Albums.FindIndex(e => e.AlbumId == updatedItem.AlbumId);
+        if (index != -1)
+        {
+            try
+            {
+                var response = await Http.PutAsJsonAsync($"api/AlbumIteration/updateAlbum/{updatedItem.AlbumId}", updatedItem);
+                if (response.IsSuccessStatusCode)
+                {
+                    Snackbar.Add("Album added successfully", Severity.Success);
+                }
+                else
+                {
+                    var error = await response.Content.ReadAsStringAsync();
+                    Snackbar.Add($"Error adding album: {error}", Severity.Error);
+                }
+            }
+            catch (Exception ex)
+            {
+                Snackbar.Add($"Error: {ex.Message}", Severity.Error);
+            }
+            Albums[index] = updatedItem;
+            StateHasChanged();
+        }
+        Console.WriteLine($"Обновлен элемент с ID: {updatedItem.AlbumId}");
+    }
+
+    private async Task HandleDelete(Album itemToDelete)
+    {
+        try
+        {
+            var response = await Http.DeleteAsync($"api/AlbumIteration/deleteAlbum/{itemToDelete.AlbumId}");
+            if (response.IsSuccessStatusCode)
+            {
+                Albums.Remove(itemToDelete);
+                Snackbar.Add("Album successfully deleted", Severity.Success);
+            }
+            else
+            {
+                var error = await response.Content.ReadAsStringAsync();
+                Snackbar.Add($"Error deleting album: {error}", Severity.Error);
+            }
+        }
+        catch (Exception ex)
+        {
+            Snackbar.Add($"Error: {ex.Message}", Severity.Error);
+        }
+        StateHasChanged();
     }
 }
